@@ -1,0 +1,4 @@
+.menu-link.active svg path,
+.menu-link.active svg rect {
+    fill: #ffffff;
+}
