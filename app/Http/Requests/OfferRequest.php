@@ -23,7 +23,7 @@ class OfferRequest extends FormRequest
     {
         return [
             'account_id' => 'required|exists:accounts,id',
-            'stock_id' => 'required|exists:stocks,id',
+            'stocks' => 'required|array|exists:stocks,id',
             'title' => 'required|string',
             'price' => 'required|numeric',
         ];

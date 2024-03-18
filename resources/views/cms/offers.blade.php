@@ -53,7 +53,6 @@
                         <th class="w-30px pe-2"><i class="bi bi-card-checklist"></i></th>
                         <th class="min-w-250px">Başlık</th>
                         <th class="min-w-250px">Cari Kodu</th>
-                        <th class="min-w-250px">Stok Kodu</th>
                         <th class="text-end min-w-70px"><i class="bi bi-menu-button-wide-fill"></i></th>
                     </tr>
                     <!--end::Table row-->
@@ -80,15 +79,6 @@
                                 <div class="d-flex align-items-center ms-5">
                                     <!--begin::Title-->
                                     <a href="#//" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{ $item->account->code }}</a>
-                                    <!--end::Title-->
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex">
-                                <div class="d-flex align-items-center ms-5">
-                                    <!--begin::Title-->
-                                    <a href="#//" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{ $item->stock->code }}</a>
                                     <!--end::Title-->
                                 </div>
                             </div>
@@ -182,9 +172,10 @@
                                             </select>
                                         </div>
                                         <div class="mb-2">
-                                            <select name="stock_id"
+                                            <select name="stocks[]"
                                                 id="create_offer_modal_stocks"
                                                 class="form-select form-select-solid"
+                                                multiple="multiple"
                                                 required>
                                                 <option value="">Stok Kodu Seçin...</option>
                                             </select>
@@ -272,10 +263,10 @@
                                         </select>
                                     </div>
                                     <div class="mb-2">
-                                        <select name="stock_id"
+                                        <select name="stocks"
                                             id="view_offer_modal_stocks"
                                             class="form-select form-select-solid"
-                                            disabled>
+                                            multiple="multiple" disabled>
                                             <option value="">Stok Kodu Seçin...</option>
                                         </select>
                                     </div>
@@ -332,6 +323,10 @@
 
         $('#create_offer_modal_stocks').select2({
             dropdownParent: $("#create_offer_modal_stocks").parent()
+        });
+
+        $('#view_offer_modal_stocks').select2({
+            dropdownParent: $("#view_offer_modal_stocks").parent()
         });
 
         $.ajax({
@@ -415,12 +410,18 @@
                         $('#view_offer_modal input[name="title"]').val(response.data.title);
 
                         $('#view_offer_modal select[name="account_id"]').empty();
-                        $('#view_offer_modal select[name="account_id"]').append('<option value="' + response.data.account_id + '" selected>' + response.data.account.code + '</option>');
+                        $('#view_offer_modal select[name="account_id"]').append('<option value="' + response.data.offer.account_id + '" selected>' + response.data.offer.account.code + '</option>');
 
-                        $('#view_offer_modal select[name="stock_id"]').empty();
-                        $('#view_offer_modal select[name="stock_id"]').append('<option value="' + response.data.stock_id + '" selected>' + response.data.stock.code + '</option>');
+                        $('#view_offer_modal select[name="stocks"]').empty();
+                        $.each(response.data.stocks, function(index, stock) {
+                            var option = $('<option></option>').attr('value', stock.id).text(stock.code);
+                            if ($.inArray(stock.id, response.data.offer.stocks.map(stock => stock.id)) !== -1) {
+                                option.attr('selected', 'selected');
+                            }
+                            $('#view_offer_modal select[name="stocks"]').append(option);
+                        });
 
-                        $('#view_offer_modal input[name="price"]').val(response.data.price);
+                        $('#view_offer_modal input[name="price"]').val(response.data.offer.price);
                     }
                 }
             });

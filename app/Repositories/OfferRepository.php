@@ -13,16 +13,17 @@ class OfferRepository
         $offer = new Offer();
         $offer->uuid = Str::uuid();
         $offer->account_id = $offerObject->getAccountId();
-        $offer->stock_id = $offerObject->getStockId();
         $offer->title = $offerObject->getTitle();
         $offer->price = $offerObject->getPrice();
         $offer->save();
+
+        $offer->stocks()->attach($offerObject->getStocks());
 
         return $offer;
     }
 
     public function getOffer(OfferObject $offerObject)
     {
-        return Offer::with('account', 'stock')->find($offerObject->getId());
+        return Offer::with('account', 'stocks')->find($offerObject->getId());
     }
 }

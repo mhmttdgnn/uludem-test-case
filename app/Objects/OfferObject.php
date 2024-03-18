@@ -6,7 +6,7 @@ class OfferObject
 {
     public ?int $id;
     public ?int $account_id;
-    public ?int $stock_id;
+    public ?array $stocks;
     public ?string $title;
     public ?int $price;
 
@@ -30,14 +30,14 @@ class OfferObject
         return $this->account_id;
     }
 
-    public function setStockId(?int $stock_id)
+    public function setStocks(?array $stocks)
     {
-        $this->stock_id = $stock_id;
+        $this->stocks = $stocks;
     }
 
-    public function getStockId(): ?int
+    public function getStocks(): ?array
     {
-        return $this->stock_id;
+        return $this->stocks;
     }
 
     public function setTitle(?string $title)

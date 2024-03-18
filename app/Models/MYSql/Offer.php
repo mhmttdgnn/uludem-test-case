@@ -21,9 +21,9 @@ class Offer extends Model
         'account_id'
     ];
 
-    public function stock()
+    public function stocks()
     {
-        return $this->belongsTo(Stock::class);
+        return $this->belongsToMany(Stock::class, 'offer_stocks');
     }
 
     public function account()

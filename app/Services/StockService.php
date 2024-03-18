@@ -7,19 +7,25 @@ use App\Repositories\StockRepository;
 
 class StockService
 {
-    protected $accountRepository;
+    protected $stockRepository;
 
-    public function __construct(StockRepository $accountRepository) {
-        $this->accountRepository = $accountRepository;
+    public function __construct(StockRepository $stockRepository) {
+        $this->stockRepository = $stockRepository;
     }
 
     public function getStocks()
     {
-        return $this->accountRepository->getStocks();
+        return $this->stockRepository->getStocks();
+    }
+
+    public function getMyStocks()
+    {
+        return $this->stockRepository->getMyStocks();
+
     }
 
     public function saveStock(StockObject $accountObject)
     {
-        return $this->accountRepository->saveStock($accountObject);
+        return $this->stockRepository->saveStock($accountObject);
     }
 }

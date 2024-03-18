@@ -8,15 +8,18 @@ use App\Models\MYSql\Offer;
 use App\Models\MYSql\Stock;
 use App\Objects\OfferObject;
 use App\Services\OfferService;
+use App\Services\StockService;
 use Illuminate\Http\Request;
 
 class DashboradController extends Controller
 {
     protected OfferService $offerService;
+    protected StockService $stockService;
 
-    public function __construct(OfferService $offerService)
+    public function __construct(OfferService $offerService, StockService $stockService)
     {
         $this->offerService = $offerService;
+        $this->stockService = $stockService;
     }
 
     public function index()
@@ -72,7 +75,7 @@ class DashboradController extends Controller
         try {
             $offerObject = new OfferObject();
             $offerObject->setAccountId($request->account_id);
-            $offerObject->setStockId($request->stock_id);
+            $offerObject->setStocks($request->stocks);
             $offerObject->setTitle($request->title);
             $offerObject->setPrice($request->price);
 
@@ -91,7 +94,14 @@ class DashboradController extends Controller
             $offerObject->setId($request->id);
             $offer = $this->offerService->getOffer($offerObject);
 
-            return response()->json(['status' => 'success', 'data' => $offer], 200);
+            $stocks = $this->stockService->getMyStocks();
+
+            $data = [
+                'offer' => $offer,
+                'stocks' => $stocks
+            ];
+
+            return response()->json(['status' => 'success', 'data' => $data], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

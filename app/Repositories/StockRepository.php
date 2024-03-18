@@ -13,6 +13,11 @@ class StockRepository
         return SqlSrvStok::select('ID', 'KOD', 'ADI')->get();
     }
 
+    public function getMyStocks()
+    {
+        return Stock::select('id', 'code', 'name')->get();
+    }
+
     public function saveStock(StockObject $stockObject)
     {
         return Stock::updateOrCreate(
